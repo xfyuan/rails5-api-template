@@ -32,8 +32,7 @@ gem 'rails', '~> 5.0.0'
 gem 'pg'
 gem 'puma'
 gem 'rack-cors'
-# gem 'active_model_serializers', '~> 0.10.0'
-gem 'jsonapi-resources'
+gem 'active_model_serializers', '~> 0.10.0'
 # Cronjob schedulers that can be coded in the
 # gem 'whenever', require: false
 gem 'redis'
@@ -122,6 +121,10 @@ get 'https://raw.githubusercontent.com/rails/rails/master/.rubocop.yml', '.ruboc
 get 'https://raw.github.com/svenfuchs/rails-i18n/master/rails/locale/zh-CN.yml', 'config/locales/zh-CN.yml'
 
 file 'circle.yml', <<-CODE
+machine:
+  services:
+    - elasticsearch
+    - redis
 database:
   override:
     - bin/setup
@@ -132,10 +135,9 @@ CODE
 
 # Initializer
 # ----------------------------------------------------------------
-
-# initializer 'active_model_serializer.rb', <<-CODE
-# ActiveModelSerializers.config.adapter = :json_api
-# CODE
+initializer 'active_model_serializer.rb', <<-CODE
+ActiveModelSerializers.config.adapter = :json_api
+CODE
 
 initializer 'rack_mini_profiler.rb', <<-CODE
 if ENV["RACK_MINI_PROFILER"].to_i > 0
